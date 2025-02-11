@@ -46,7 +46,7 @@
 	<div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
 		<span>Made by</span>
 		<span class="text-red-500">❤️</span>
-		<span>to</span>
+		<span>for</span>
 		<span class="text-blue-500">AWAN ☁️</span>
 	</div>
 	<div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
