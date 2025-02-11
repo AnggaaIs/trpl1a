@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '@fontsource-variable/outfit';
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
 	import { Button } from '$lib/components/ui/button';
 	import '../app.css';
@@ -41,8 +40,25 @@
 	</div>
 </div>
 
-<style>
-	:global(body) {
-		font-family: 'Outfit Varible', sans-serif;
-	}
-</style>
+<footer
+	class="mt-10 flex w-full flex-col items-center justify-center border-t px-5 py-6 text-center backdrop-blur-sm"
+>
+	<div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+		<span>Made by</span>
+		<span class="text-red-500">❤️</span>
+		<span>to</span>
+		<span class="text-blue-500">AWAN ☁️</span>
+	</div>
+	<div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+		<span>Formulated in</span>
+		<a href="https://svelte.dev" class="text-sky-500 hover:underline">svelte</a>,
+		<a href="https://tailwindcss.com" class="text-teal-500 hover:underline">tailwindcss</a>, and
+		<a href="https://ui.shadcn.com" class="text-purple-500 hover:underline">shadcn/ui</a>.
+	</div>
+
+	<div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+		Follow us on <a href="https://instagram.com/aonetrpl24" class="text-pink-500 hover:underline"
+			>Instagram @aonetrpl24</a
+		>
+	</div>
+</footer>
