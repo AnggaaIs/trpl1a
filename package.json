@@ -45,7 +45,6 @@
 		"@fontsource-variable/outfit": "^5.1.1",
 		"axios": "^1.7.9",
 		"cheerio": "^1.0.0",
-		"https": "^1.0.0",
 		"lucide-svelte": "^0.475.0",
 		"mode-watcher": "^0.5.1"
 	}

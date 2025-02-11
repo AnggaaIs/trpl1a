@@ -43,6 +43,6 @@
 
 <style>
 	:global(body) {
-		font-family: 'Outfit', sans-serif;
+		font-family: 'Outfit Varible', sans-serif;
 	}
 </style>
