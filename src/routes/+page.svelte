@@ -11,7 +11,7 @@
 
 	onMount(async () => {
 		try {
-			const res = await fetch(`http://localhost:5173/api/data`);
+			const res = await fetch(`/api/data`);
 			if (!res.ok) throw new Error('Gagal mengambil data');
 
 			const result: ScheduleResponse = await res.json();
