@@ -57,8 +57,16 @@
 	</div>
 
 	<div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-		Follow us on <a href="https://instagram.com/aonetrpl24" class="text-pink-500 hover:underline"
-			>Instagram @aonetrpl24</a
-		>
+		Follow us on 
+		<a href="https://instagram.com/aonetrpl24" class="text-pink-500 hover:underline">
+			Instagram @aonetrpl24
+		</a>
+	</div>
+
+	<div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+		Source code available on 
+		<a href="https://github.com/AnggaaIs/kelas" class="text-green-500 hover:underline">
+			GitHub
+		</a>.
 	</div>
 </footer>
