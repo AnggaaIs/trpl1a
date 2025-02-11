@@ -65,7 +65,7 @@
 
 	<div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
 		Source code available on 
-		<a href="https://github.com/AnggaaIs/kelas" class="text-green-500 hover:underline">
+		<a href="https://github.com/AnggaaIs/trpl1a" class="text-green-500 hover:underline">
 			GitHub
 		</a>.
 	</div>
