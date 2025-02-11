@@ -1,0 +1,85 @@
+CONNECTED(00000003)
+---
+Certificate chain
+ 0 s:CN = *.badssl.com
+   i:C = US, O = Let's Encrypt, CN = R11
+---
+Server certificate
+-----BEGIN CERTIFICATE-----
+MIIE8zCCA9ugAwIBAgISBKsy1BQaBcW0hJUvtGEeuFTjMA0GCSqGSIb3DQEBCwUA
+MDMxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MQwwCgYDVQQD
+EwNSMTEwHhcNMjUwMTA3MDMwMjUxWhcNMjUwNDA3MDMwMjUwWjAXMRUwEwYDVQQD
+DAwqLmJhZHNzbC5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC4
+X/qQozcaG8z5kHqLE5KTihY5k83ic8d1VOgLXaHomBnFzrKp+B0bVhQ4yy6DxkzT
+wp8gxlwZ3y3eixJk3fScc1u1XqWh7le4KFx9qZU7YXLstsGVo6kKDKOlR+Ngtt85
+RLFnkSnklZi59oueq9Nkg7v9z3gE5WShrbiMtovyqlqVDclteF5HefiRR541LYis
+tig1ERgZsjy5Uex23c/6HZrNYkmHPLnnBieXD4A/HX/zpOkR+ALMWpzP3gmM4roM
+8kc8DsBTEKOdpgXZT6E10Q4q+hZoNGIlBoL3cC9FvNCIVpTzoHN0tHKLG5+fhCzl
+Xm60zfVYGvu4bC6whF3rAgMBAAGjggIbMIICFzAOBgNVHQ8BAf8EBAMCBaAwHQYD
+VR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUFBwMCMAwGA1UdEwEB/wQCMAAwHQYDVR0O
+BBYEFDLp5Di0o5B+VPBJTr+PED86S7HxMB8GA1UdIwQYMBaAFMXPRqTq9MPAemyV
+xC2wXpIvJuO5MFcGCCsGAQUFBwEBBEswSTAiBggrBgEFBQcwAYYWaHR0cDovL3Ix
+MS5vLmxlbmNyLm9yZzAjBggrBgEFBQcwAoYXaHR0cDovL3IxMS5pLmxlbmNyLm9y
+Zy8wIwYDVR0RBBwwGoIMKi5iYWRzc2wuY29tggpiYWRzc2wuY29tMBMGA1UdIAQM
+MAowCAYGZ4EMAQIBMIIBAwYKKwYBBAHWeQIEAgSB9ASB8QDvAHUAzPsPaoVxCWX+
+lZtTzumyfCLphVwNl422qX5UwP5MDbAAAAGUPuyd6AAABAMARjBEAiA8QpsdYBPR
+U3K8Dn7TDORfyCShdQClUTyezoIRwvv5uQIgcD4/IoIzqHxUmbm8vVv04QlqD41J
+K9e8zsnxjlUQHusAdgATSt8atZhCCXgMb+9MepGkFrcjSc5YV2rfrtqnwqvgIgAA
+AZQ+7J87AAAEAwBHMEUCIBTKnIR56aduNJRGKRZIBh7Wl3bPL9lBauT7/orw8vEL
+AiEAzYEXzMRReUNN0t4HC7rjCyRNzlho+fhtJ9vjnGXuL7kwDQYJKoZIhvcNAQEL
+BQADggEBAHv4X0Saqb2kOmb6f2BdaTZp3lHaOAPBTzoZwRB/2glahVEPEZ7hQXu6
+iyuncJBZZHZVpsWOy8phU7P/i5DvEIcOEK/nJnFoGEmGFZQ8CxUAKSavfATwbf1d
+22FKo0H18wRaFUbwYIJ8lrlHD3H2FJO0DbRsZLvM7bdEatnvOwgKL9TtqbLttlnv
+m0Ou7X8/vhf8soUiuRwIi7agTIhVvO3g2WV/z0buPzFRZHPuVXgvHUhAae6eia3M
+9YaPicOM9ucIj0E7/lRq0rBCvgSJwi1yThNDpIvVxuiSo3dk0BykLg4PBtpyxn1/
+AQQ6ISLraj9mPmPPMw39kzn1R2nVnak=
+-----END CERTIFICATE-----
+subject=CN = *.badssl.com
+
+issuer=C = US, O = Let's Encrypt, CN = R11
+
+---
+No client certificate CA names sent
+Peer signing digest: SHA512
+Peer signature type: RSA
+Server Temp Key: ECDH, P-256, 256 bits
+---
+SSL handshake has read 1977 bytes and written 445 bytes
+Verification error: unable to verify the first certificate
+---
+New, TLSv1.2, Cipher is ECDHE-RSA-AES128-GCM-SHA256
+Server public key is 2048 bit
+Secure Renegotiation IS supported
+Compression: NONE
+Expansion: NONE
+No ALPN negotiated
+SSL-Session:
+    Protocol  : TLSv1.2
+    Cipher    : ECDHE-RSA-AES128-GCM-SHA256
+    Session-ID: 823AA31AFB3A8651832C2234EBF3C4F87B58A000A064B74A266D6C9E513FDADA
+    Session-ID-ctx: 
+    Master-Key: C3BD2391EA1EEDC69BA134E12FB90D57DAFC9962B7A4B8150EB68289C412EB79C6D208D0F2B19FA7BC3DC999A61CC144
+    PSK identity: None
+    PSK identity hint: None
+    SRP username: None
+    TLS session ticket lifetime hint: 300 (seconds)
+    TLS session ticket:
+    0000 - b9 8f 88 6d d8 d1 55 f8-b0 7a db 95 5f 8b 32 8c   ...m..U..z.._.2.
+    0010 - a3 07 73 8d 68 ea 01 33-0c 05 ad 79 3f 0d 30 49   ..s.h..3...y?.0I
+    0020 - 51 b6 e9 4e 8c 2e 3e 8d-06 cd 70 b5 4f 93 a2 8a   Q..N..>...p.O...
+    0030 - 5e 17 6d 03 5a 59 38 44-7a df cb 75 59 c7 35 75   ^.m.ZY8Dz..uY.5u
+    0040 - 36 49 f4 be 79 56 a6 f7-67 3e 76 14 1c 4b de f4   6I..yV..g>v..K..
+    0050 - 67 7a 8d 3f 65 c3 39 34-48 fd 4f 3e 7c f8 4f a3   gz.?e.94H.O>|.O.
+    0060 - 05 31 0b 6a a8 01 80 21-7b 42 2b 74 37 2f d0 78   .1.j...!{B+t7/.x
+    0070 - 0f 27 2d 35 3d 18 18 be-43 8a 13 35 02 3b f0 80   .'-5=...C..5.;..
+    0080 - 8e ff 2d a7 9e df 04 af-a0 26 ad 60 62 b9 75 71   ..-......&.`b.uq
+    0090 - dc e8 5f e4 af 71 76 ce-0f a9 67 3c b0 06 60 17   .._..qv...g<..`.
+    00a0 - b6 56 b6 fa 8b 1c 95 af-fd 9b e7 0f 97 da 2d 59   .V............-Y
+    00b0 - 95 03 53 73 f8 ba 32 2e-e2 a2 a8 0a 10 5b d4 db   ..Ss..2......[..
+    00c0 - 8e 6e fa 9c 1e d7 32 27-15 a1 ad a2 d6 8a 33 9f   .n....2'......3.
+
+    Start Time: 1739203132
+    Timeout   : 7200 (sec)
+    Verify return code: 21 (unable to verify the first certificate)
+    Extended master secret: no
+---
