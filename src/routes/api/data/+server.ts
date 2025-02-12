@@ -106,9 +106,11 @@ export const GET: RequestHandler = async () => {
 					const currentMinute = date.getMinutes();
 
 					if (currentHour === 11 && currentMinute >= 55) {
+						if (i + 1 === Number(rawSpan)) break;
 						date.setHours(13);
 						date.setMinutes(0);
 					} else if (currentHour === 15 && currentMinute >= 30) {
+						if (i + 1 === Number(rawSpan)) break;
 						date.setHours(15);
 						date.setMinutes(45);
 					}
