@@ -1,30 +1,30 @@
-import type { RequestHandler } from '@sveltejs/kit';
-import * as cheerio from 'cheerio';
-import axios from 'axios';
-import https from 'https';
-import type { MatkulDetil, ScheduleEntry } from './$types';
+import type { RequestHandler } from "@sveltejs/kit";
+import * as cheerio from "cheerio";
+import axios from "axios";
+import https from "https";
+import type { MatkulDetil, ScheduleEntry } from "./$types";
 
 const parseSchedule = (detil: string[]): ScheduleEntry => {
 	if (detil.length < 4) {
-		return { mata_kuliah: { kode: '-', nama: '-' }, jenis: 'MKDU', dosen: [], ruang: '-' };
+		return { mata_kuliah: { kode: "-", nama: "-" }, jenis: "MKDU", dosen: [], ruang: "-" };
 	}
 
-	if (detil.length === 5 && detil[4] === '') {
+	if (detil.length === 5 && detil[4] === "") {
 		detil = detil.slice(0, 4);
 	}
 
 	const kelas = detil[0];
 	let matkul = detil[1];
-	const kode_matkul = matkul.split(' ')[0];
-	matkul = matkul.replace(kode_matkul, '').trim();
-	const dosen = detil[2].split(', ');
+	const kode_matkul = matkul.split(" ")[0];
+	matkul = matkul.replace(kode_matkul, "").trim();
+	const dosen = detil[2].split(", ");
 	const ruang = detil[3];
 
-	let jenis: 'Praktek' | 'Teori' | 'MKDU' = matkul.endsWith('PRAKTEK')
-		? 'Praktek'
-		: matkul.endsWith('TEORI')
-			? 'Teori'
-			: 'MKDU';
+	let jenis: "Praktek" | "Teori" | "MKDU" = matkul.endsWith("PRAKTEK")
+		? "Praktek"
+		: matkul.endsWith("TEORI")
+			? "Teori"
+			: "MKDU";
 
 	return {
 		mata_kuliah: {
@@ -39,13 +39,13 @@ const parseSchedule = (detil: string[]): ScheduleEntry => {
 
 export const GET: RequestHandler = async () => {
 	const url =
-		'https://presensi.pnp.ac.id/ti/TI%20Ganjil%202024-2025%20noAK%20v1.1_subgroups_days_horizontal.html';
+		"https://presensi.pnp.ac.id/ti/TI%20Ganjil%202024-2025%20noAK%20v1.1_subgroups_days_horizontal.html";
 
 	const agent = new https.Agent({ rejectUnauthorized: false });
 	const { data: html } = await axios.get(url, { httpsAgent: agent });
-	const updatedHtml = html.replaceAll('<!-- span -->', '<td>---</td>');
+	const updatedHtml = html.replaceAll("<!-- span -->", "<td>---</td>");
 	const $ = cheerio.load(updatedHtml);
-	const table = $('#table_22');
+	const table = $("#table_22");
 
 	const schedule: Record<
 		string,
@@ -61,27 +61,27 @@ export const GET: RequestHandler = async () => {
 			jenis: string;
 		}[]
 	> = {};
-	const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+	const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
 	for (const day of days) {
 		schedule[day] = [
 			{
 				waktu: {
-					start: '00:00',
-					end: '00:00',
+					start: "00:00",
+					end: "00:00",
 					durasi: 0
 				},
-				mata_kuliah: { nama: '-', kode: '-' },
+				mata_kuliah: { nama: "-", kode: "-" },
 				dosen: [],
-				ruang: '-',
-				jenis: 'Libur'
+				ruang: "-",
+				jenis: "Libur"
 			}
 		];
 	}
 
-	table.find('tr').each((rowIndex, row) => {
+	table.find("tr").each((rowIndex, row) => {
 		if (rowIndex === 0) return;
-		const cells = $(row).find('td, th');
+		const cells = $(row).find("td, th");
 
 		cells.each((cellIndex, cell) => {
 			if (cellIndex === 0) return;
@@ -92,8 +92,8 @@ export const GET: RequestHandler = async () => {
 			let time = $(cells[0]).text();
 
 			if (rawSpan) {
-				const startTime = time.split(' - ')[0];
-				const [hours, minutes] = startTime.split(':').map(Number);
+				const startTime = time.split(" - ")[0];
+				const [hours, minutes] = startTime.split(":").map(Number);
 
 				let date = new Date();
 				date.setHours(hours);
@@ -118,15 +118,15 @@ export const GET: RequestHandler = async () => {
 				time = `${startTime} - ${endTime}`;
 			}
 
-			if (text !== '---') {
-				const detil = $(cell).html()?.split('<br>') ?? [];
+			if (text !== "---") {
+				const detil = $(cell).html()?.split("<br>") ?? [];
 
 				const parsed = parseSchedule(detil);
 				const { mata_kuliah, dosen, ruang, jenis } = parsed;
 
-				if (mata_kuliah.kode === '-') return;
+				if (mata_kuliah.kode === "-") return;
 
-				if (schedule[day].length === 1 && schedule[day][0].mata_kuliah.kode === '-') {
+				if (schedule[day].length === 1 && schedule[day][0].mata_kuliah.kode === "-") {
 					schedule[day] = [];
 				}
 
@@ -135,8 +135,8 @@ export const GET: RequestHandler = async () => {
 
 				schedule[day].push({
 					waktu: {
-						start: time.split(' - ')[0],
-						end: time.split(' - ')[1],
+						start: time.split(" - ")[0],
+						end: time.split(" - ")[1],
 						durasi: Number(rawSpan)
 					},
 					mata_kuliah,
@@ -149,9 +149,9 @@ export const GET: RequestHandler = async () => {
 	});
 
 	return new Response(
-		JSON.stringify({ statusCode: 200, message: 'SUCCESS', data: schedule }, null, 2),
+		JSON.stringify({ statusCode: 200, message: "SUCCESS", data: schedule }, null, 2),
 		{
-			headers: { 'Content-Type': 'application/json' }
+			headers: { "Content-Type": "application/json" }
 		}
 	);
 };

@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { writable } from 'svelte/store';
-	import type { ScheduleResponse } from './api/data/$types';
-	import { onMount } from 'svelte';
-	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
-	import { Alert, Button } from 'flowbite-svelte';
-	import { MoonStar, CircleAlert } from 'lucide-svelte';
-	import { fly } from 'svelte/transition';
+	import { writable } from "svelte/store";
+	import type { ScheduleResponse } from "./api/data/$types";
+	import { onMount } from "svelte";
+	import Skeleton from "$lib/components/ui/skeleton/skeleton.svelte";
+	import { Alert, Button } from "flowbite-svelte";
+	import { MoonStar, CircleAlert } from "lucide-svelte";
+	import { fly } from "svelte/transition";
 
 	const data = writable<ScheduleResponse | null>(null);
 	const isLoading = writable(true);
@@ -40,7 +40,7 @@
 				);
 			}
 		} catch (error) {
-			ramadhanMessage.set('❗ Gagal mendapatkan informasi Ramadhan.');
+			ramadhanMessage.set("❗ Gagal mendapatkan informasi Ramadhan.");
 		}
 	};
 
@@ -49,7 +49,7 @@
 
 		try {
 			const res = await fetch(`/api/data`);
-			if (!res.ok) throw new Error('Gagal mengambil data');
+			if (!res.ok) throw new Error("Gagal mengambil data");
 
 			const result: ScheduleResponse = await res.json();
 			data.set(result);
@@ -64,17 +64,17 @@
 		now.set(new Date());
 	}, 1000);
 
-	const today = new Date().toLocaleDateString('id-ID', { weekday: 'long' });
+	const today = new Date().toLocaleDateString("id-ID", { weekday: "long" });
 
 	let currentTime: string;
 	now.subscribe((n) => {
-		currentTime = n.toLocaleTimeString('en-US', { hour12: false, timeZone: 'Asia/Jakarta' });
+		currentTime = n.toLocaleTimeString("en-US", { hour12: false, timeZone: "Asia/Jakarta" });
 	});
 
 	$: scheduleToday = $data?.data?.[today] || [];
-	$: validSchedule = scheduleToday.filter((matkul) => matkul.waktu?.start !== '00:00');
+	$: validSchedule = scheduleToday.filter((matkul) => matkul.waktu?.start !== "00:00");
 	$: finishedClasses = validSchedule.filter((matkul) => {
-		const [endHour, endMinute] = matkul.waktu!.end.split(':').map(Number);
+		const [endHour, endMinute] = matkul.waktu!.end.split(":").map(Number);
 		const endTime = new Date();
 		endTime.setHours(endHour, endMinute, 0);
 		return $now > endTime;
@@ -82,8 +82,8 @@
 	$: allClassesFinished = finishedClasses.length === validSchedule.length;
 
 	$: currentClass = validSchedule.find((matkul) => {
-		const [startHour, startMinute] = matkul.waktu!.start.split(':').map(Number);
-		const [endHour, endMinute] = matkul.waktu!.end.split(':').map(Number);
+		const [startHour, startMinute] = matkul.waktu!.start.split(":").map(Number);
+		const [endHour, endMinute] = matkul.waktu!.end.split(":").map(Number);
 		const startTime = new Date();
 		startTime.setHours(startHour, startMinute, 0);
 		const endTime = new Date();
@@ -92,14 +92,14 @@
 	});
 
 	$: nextClass = validSchedule.find((matkul) => {
-		const [hour, minute] = matkul.waktu!.start.split(':').map(Number);
+		const [hour, minute] = matkul.waktu!.start.split(":").map(Number);
 		const classTime = new Date();
 		classTime.setHours(hour, minute, 0);
 		return classTime > $now;
 	});
 
 	function timeLeft(endTime: string) {
-		const [hour, minute] = endTime.split(':').map(Number);
+		const [hour, minute] = endTime.split(":").map(Number);
 		const classEnd = new Date();
 		classEnd.setHours(hour, minute, 0);
 		const diff = classEnd.getTime() - $now.getTime();
@@ -107,7 +107,7 @@
 		const hours = Math.floor(minutesLeft / 60);
 		const minutes = minutesLeft % 60;
 
-		if (minutesLeft <= 0) return 'Selesai';
+		if (minutesLeft <= 0) return "Selesai";
 		if (hours > 0) return `${hours} jam ${minutes} menit lagi`;
 		return `${minutes} menit lagi`;
 	}
@@ -120,7 +120,7 @@
 	}
 
 	function formatedMatkul(matkul: string) {
-		return matkul.replace(/\s*(PRAKTEK|TEORI|MKDU)$/i, '');
+		return matkul.replace(/\s*(PRAKTEK|TEORI|MKDU)$/i, "");
 	}
 </script>
 
@@ -247,7 +247,7 @@
 							🕒 {timeLeft(currentClass.waktu!.end)}
 						</p>
 						<p class="text-sm text-muted-foreground">
-							👨‍🏫 {currentClass.dosen.map((x) => toProperCase(x)).join(', ')}
+							👨‍🏫 {currentClass.dosen.map((x) => toProperCase(x)).join(", ")}
 						</p>
 					</div>
 				{/if}
@@ -263,7 +263,7 @@
 							🕒 Dimulai dalam {timeLeft(nextClass.waktu!.start)}
 						</p>
 						<p class="text-sm text-muted-foreground">
-							👨‍🏫 {nextClass.dosen.map((x) => toProperCase(x)).join(', ')}
+							👨‍🏫 {nextClass.dosen.map((x) => toProperCase(x)).join(", ")}
 						</p>
 					</div>
 				{/if}
@@ -282,7 +282,7 @@
 									🕒 {matkul.waktu!.start} - {matkul.waktu!.end} | 🏫 {matkul.ruang}
 								</p>
 								<p class="text-sm text-muted-foreground">
-									👨‍🏫 {matkul.dosen.map((x) => toProperCase(x)).join(', ')}
+									👨‍🏫 {matkul.dosen.map((x) => toProperCase(x)).join(", ")}
 								</p>
 								<span
 									class="mt-2 inline-block rounded-full bg-muted px-3 py-1 text-xs font-semibold"
@@ -294,11 +294,11 @@
 				</div>
 			{:else if allClassesFinished}
 				<p class="text-center text-xl text-muted-foreground">
-					🗓️ {new Date().toLocaleDateString('id-ID', {
-						weekday: 'long',
-						day: 'numeric',
-						month: 'long',
-						year: 'numeric'
+					🗓️ {new Date().toLocaleDateString("id-ID", {
+						weekday: "long",
+						day: "numeric",
+						month: "long",
+						year: "numeric"
 					})}
 				</p>
 				<p class="text-center text-xl text-muted-foreground">

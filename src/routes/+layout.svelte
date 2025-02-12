@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { ModeWatcher, toggleMode } from 'mode-watcher';
-	import { Button } from '$lib/components/ui/button';
-	import '../app.css';
+	import { ModeWatcher, toggleMode } from "mode-watcher";
+	import { Button } from "$lib/components/ui/button";
+	import "../app.css";
 	let { children } = $props();
-	import { MoonIcon, SunIcon } from 'lucide-svelte';
+	import { MoonIcon, SunIcon } from "lucide-svelte";
 </script>
 
 <div
@@ -30,7 +30,7 @@
 
 <div class="flex min-h-[100vh] justify-center px-7 pt-20">
 	<div class="w-full max-w-[85rem]">
-		<ModeWatcher track={false} defaultMode={'dark'} />
+		<ModeWatcher track={false} defaultMode={"dark"} />
 		{@render children()}
 	</div>
 </div>

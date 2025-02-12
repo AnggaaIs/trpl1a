@@ -1,141 +1,145 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Ups! Nggak Ada Internet</title>
+		<link rel="shortcut icon" href="/favicon.ico" />
+		<style>
+			@font-face {
+				font-family: "Outfit";
+				src: url("./Outfit-Regular.ttf") format("truetype");
+				font-weight: 400;
+				font-style: normal;
+			}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ups! Nggak Ada Internet</title>
-  <link rel="shortcut icon" href="/favicon.ico">
-  <style>
-    @font-face {
-      font-family: 'Outfit';
-      src: url('./Outfit-Regular.ttf') format('truetype');
-      font-weight: 400;
-      font-style: normal;
-    }
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+				font-family: "Outfit", sans-serif;
+			}
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Outfit', sans-serif;
-    }
+			body {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				min-height: 100vh;
+				background-color: #121212;
+				color: #f1f5f9;
+				text-align: center;
+				overflow: hidden;
+				padding: 0 16px;
+			}
 
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      background-color: #121212;
-      color: #f1f5f9;
-      text-align: center;
-      overflow: hidden;
-      padding: 0 16px;
-    }
+			.container {
+				width: 90%;
+				max-width: 450px;
+				background: #1e1e1e;
+				padding: 25px;
+				border-radius: 16px;
+				box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+			}
 
-    .container {
-      width: 90%;
-      max-width: 450px;
-      background: #1e1e1e;
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
-    }
+			h1 {
+				font-size: 2rem;
+				font-weight: 600;
+				margin-bottom: 12px;
+			}
 
-    h1 {
-      font-size: 2rem;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
+			p {
+				font-size: 1.1rem;
+				margin-bottom: 18px;
+				color: #cbd5e1;
+			}
 
-    p {
-      font-size: 1.1rem;
-      margin-bottom: 18px;
-      color: #cbd5e1;
-    }
+			.btn {
+				display: inline-block;
+				padding: 12px 24px;
+				font-size: 1rem;
+				font-weight: bold;
+				color: #121212;
+				background: #f1f5f9;
+				border: none;
+				border-radius: 8px;
+				cursor: pointer;
+				transition:
+					background 0.3s,
+					transform 0.2s;
+			}
 
-    .btn {
-      display: inline-block;
-      padding: 12px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      color: #121212;
-      background: #f1f5f9;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
+			.btn:hover {
+				background: #e2e8f0;
+				transform: scale(1.05);
+			}
 
-    .btn:hover {
-      background: #e2e8f0;
-      transform: scale(1.05);
-    }
+			.loading-card {
+				position: fixed;
+				top: 20px;
+				left: 50%;
+				transform: translateX(-50%);
+				background: #f59e0b;
+				color: #121212;
+				padding: 12px 24px;
+				border-radius: 8px;
+				font-weight: bold;
+				box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+				transition:
+					background 0.3s,
+					transform 0.3s;
+			}
 
-    .loading-card {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #f59e0b;
-      color: #121212;
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-weight: bold;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
-      transition: background 0.3s, transform 0.3s;
-    }
+			.loading-card.online {
+				background: #22c55e;
+				transform: translateX(-50%) scale(1.1);
+			}
+		</style>
+	</head>
 
-    .loading-card.online {
-      background: #22c55e;
-      transform: translateX(-50%) scale(1.1);
-    }
-  </style>
-</head>
+	<body>
+		<!-- Loading Card -->
+		<div id="loading-card" class="loading-card">Mencari jaringan...</div>
 
-<body>
-  <!-- Loading Card -->
-  <div id="loading-card" class="loading-card">Mencari jaringan...</div>
+		<div class="container">
+			<h1>Ups! Nggak Ada Internet</h1>
+			<p>
+				Kamu lagi nyasar di dunia tanpa jaringan. Cek jaringan kamu dan balik lagi ke dunia nyata!
+			</p>
+			<button class="btn" onclick="location.reload()">Coba Lagi</button>
+		</div>
 
-  <div class="container">
-    <h1>Ups! Nggak Ada Internet</h1>
-    <p>Kamu lagi nyasar di dunia tanpa jaringan. Cek jaringan kamu dan balik lagi ke dunia nyata!</p>
-    <button class="btn" onclick="location.reload()">Coba Lagi</button>
-  </div>
+		<script>
+			const loadingCard = document.getElementById("loading-card");
 
-  <script>
-    const loadingCard = document.getElementById("loading-card");
+			if (navigator.onLine) {
+				loadingCard.textContent = "Terhubung stabil!";
+				loadingCard.classList.add("online");
 
-    if (navigator.onLine) {
-      loadingCard.textContent = "Terhubung stabil!";
-      loadingCard.classList.add("online");
+				setTimeout(() => {
+					loadingCard.style.display = "none";
+				}, 1500);
+			}
 
-      setTimeout(() => {
-        loadingCard.style.display = "none";
-      }, 1500);
-    }
+			async function fetchIP(retry = true) {
+				try {
+					const response = await fetch("https://api64.ipify.org?format=json");
+					if (!response.ok) throw new Error("Respon tidak valid");
+					const data = await response.json();
+					loadingCard.textContent = `Terhubung kembali! IP: ${data.ip}`;
+					setTimeout(() => location.reload(), 3000);
+				} catch (error) {
+					loadingCard.textContent = "Jaringan tidak stabil, IP tidak dapat diambil";
+					if (retry) {
+						setTimeout(() => fetchIP(true), 3000);
+					}
+				}
+			}
 
-    async function fetchIP(retry = true) {
-      try {
-        const response = await fetch("https://api64.ipify.org?format=json");
-        if (!response.ok) throw new Error("Respon tidak valid");
-        const data = await response.json();
-        loadingCard.textContent = `Terhubung kembali! IP: ${data.ip}`;
-        setTimeout(() => location.reload(), 3000);
-      } catch (error) {
-        loadingCard.textContent = "Jaringan tidak stabil, IP tidak dapat diambil";
-        if (retry) {
-          setTimeout(() => fetchIP(true), 3000);
-        }
-      }
-    }
-
-    window.addEventListener("online", () => {
-      loadingCard.textContent = "Terhubung kembali! Mengambil IP...";
-      loadingCard.classList.add("online");
-      fetchIP();
-    });
-  </script>
-</body>
-
+			window.addEventListener("online", () => {
+				loadingCard.textContent = "Terhubung kembali! Mengambil IP...";
+				loadingCard.classList.add("online");
+				fetchIP();
+			});
+		</script>
+	</body>
 </html>

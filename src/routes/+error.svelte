@@ -1,20 +1,20 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { Button } from '$lib/components/ui/button';
+	import { page } from "$app/state";
+	import { Button } from "$lib/components/ui/button";
 
 	let error = {
 		statusCode: 404,
-		message: 'Halaman tidak ditemukan'
+		message: "Halaman tidak ditemukan"
 	};
 
 	switch (page.status) {
 		case 404:
 			error.statusCode = 404;
-			error.message = 'Halaman tidak ditemukan';
+			error.message = "Halaman tidak ditemukan";
 			break;
 		case 500:
 			error.statusCode = 500;
-			error.message = 'Terjadi kesalahan pada server';
+			error.message = "Terjadi kesalahan pada server";
 			break;
 	}
 </script>

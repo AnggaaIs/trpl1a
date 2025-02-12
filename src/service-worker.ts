@@ -5,12 +5,12 @@
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
 
-import { files, version } from '$service-worker';
+import { files, version } from "$service-worker";
 
 const CACHE = `aone-cache-${version}`;
 const ASSETS = [...files];
 
-sw.addEventListener('install', (event) => {
+sw.addEventListener("install", (event) => {
 	async function addToCache() {
 		const cache = await caches.open(CACHE);
 		await cache.addAll(ASSETS);
@@ -19,7 +19,7 @@ sw.addEventListener('install', (event) => {
 	event.waitUntil(addToCache());
 });
 
-sw.addEventListener('activate', (event) => {
+sw.addEventListener("activate", (event) => {
 	async function clearOldCache() {
 		const keys = await caches.keys();
 		await Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key)));
@@ -28,19 +28,19 @@ sw.addEventListener('activate', (event) => {
 	event.waitUntil(clearOldCache());
 });
 
-sw.addEventListener('fetch', (event) => {
+sw.addEventListener("fetch", (event) => {
 	event.respondWith(
 		caches.match(event.request).then((cachedResponse) => {
 			return (
 				cachedResponse ||
 				fetch(event.request).catch(async () => {
-					if (event.request.mode === 'navigate') {
-						const offlineResponse = await caches.match('/offline.html');
+					if (event.request.mode === "navigate") {
+						const offlineResponse = await caches.match("/offline.html");
 						if (offlineResponse) {
 							return offlineResponse;
 						}
 					}
-					return new Response('Service Unavailable', { status: 503 });
+					return new Response("Service Unavailable", { status: 503 });
 				})
 			);
 		})
