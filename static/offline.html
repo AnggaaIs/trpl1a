@@ -127,7 +127,9 @@
         const data = await response.json();
         if (data.ip) {
           loadingCard.textContent = `Terhubung! IP: ${data.ip}`;
-          location.reload();
+          setTimeout(() => {
+            location.reload();
+          }, 1500);
         } else {
           loadingCard.textContent = unstable
         }
