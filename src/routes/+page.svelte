@@ -329,22 +329,32 @@
 					</div>
 				</div>
 			{:else if allClassesFinished}
-				<p class="text-center text-xl text-muted-foreground">
-					🗓️ {new Date().toLocaleDateString("id-ID", {
-						weekday: "long",
-						day: "numeric",
-						month: "long",
-						year: "numeric"
-					})}
-				</p>
-				<p class="text-center text-xl text-muted-foreground">
-					🕒 Waktu Sekarang: {currentTime}
-				</p>
-				<p class="mt-4 text-center text-4xl font-bold">🎉 Selamat Istirahat!</p>
-				<p class="mx-auto mt-2 max-w-md text-center text-lg italic text-muted-foreground">
-					Anda memiliki kekuatan atas pikiran Anda, bukan atas peristiwa di luar diri Anda. Sadari
-					ini, dan Anda akan menemukan kekuatan.
-				</p>
+				<div class="flex flex-col items-center space-y-6 text-center">
+					<div class="flex flex-col items-center gap-4 rounded-xl border-2 p-4 md:flex-row">
+						<p class="text-lg font-medium text-muted-foreground">
+							🗓️ {new Date().toLocaleDateString("id-ID", {
+								weekday: "long",
+								day: "numeric",
+								month: "long",
+								year: "numeric"
+							})}
+						</p>
+						<span class="hidden text-muted-foreground md:block">•</span>
+						<p class="text-lg font-medium text-muted-foreground">
+							🕒 {currentTime}
+						</p>
+					</div>
+					<p
+						class="animate-fade-in bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-5xl font-extrabold text-transparent"
+					>
+						🎉 Selamat Istirahat!
+					</p>
+					<div class="w-16 border-t-4 border-primary"></div>
+					<blockquote class="max-w-lg text-lg italic text-muted-foreground">
+						"Anda memiliki kekuatan atas pikiran Anda, bukan atas peristiwa di luar diri Anda.
+						Sadari ini, dan Anda akan menemukan kekuatan."
+					</blockquote>
+				</div>
 			{/if}
 		</div>
 	</div>
