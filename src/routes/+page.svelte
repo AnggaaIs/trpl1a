@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
 	import { Alert, Button } from 'flowbite-svelte';
-	import { MoonStar } from 'lucide-svelte';
+	import { MoonStar, CircleAlert } from 'lucide-svelte';
 	import { fly } from 'svelte/transition';
 
 	const data = writable<ScheduleResponse | null>(null);
@@ -140,8 +140,37 @@
 		defaultClass="bg-green-100 dark:bg-background border-green-500 text-foreground p-4 gap-3 text-sm"
 	>
 		<div class="flex items-center gap-3">
-			<MoonStar class="h-10 w-10 text-green-600 sm:h-7 sm:w-7 md:h-7 md:w-7 lg:h-8 lg:w-8" />
+			<MoonStar class="h-10 w-10 text-green-600 sm:h-6 sm:w-6 md:h-6 md:w-6 lg:h-6 lg:w-6" />
 			<span>{@html $ramadhanMessage}</span>
+		</div>
+	</Alert>
+{/if}
+
+{#if !allClassesFinished}
+	<Alert
+		color="red"
+		dismissable
+		border
+		class="mx-auto mb-5 flex max-w-4xl items-center justify-between"
+		transition={fly}
+		params={{ y: -100, duration: 500 }}
+		defaultClass="bg-red-100 dark:bg-background border-red-500 text-foreground p-4 gap-3 text-sm"
+	>
+		<div class="flex items-center gap-3">
+			<CircleAlert class="h-20 w-20 text-red-600 sm:h-10 sm:w-10 md:h-10 md:w-10 lg:h-10 lg:w-10" />
+			<span>
+				<strong>Perhatian!</strong> Semua data jadwal kuliah ini diperoleh secara otomatis dari
+				sistem
+				<a
+					href="https://presensi.pnp.ac.id"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="font-semibold text-red-700 underline hover:text-red-800"
+				>
+					Presensi PNP
+				</a>. Jika ada ketidaksesuaian atau perubahan jadwal, silakan konfirmasi langsung dengan
+				pihak akademik atau dosen terkait. Terima kasih!
+			</span>
 		</div>
 	</Alert>
 {/if}
