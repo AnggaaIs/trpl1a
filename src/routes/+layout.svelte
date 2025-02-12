@@ -4,20 +4,6 @@
 	import '../app.css';
 	let { children } = $props();
 	import { MoonIcon, SunIcon } from 'lucide-svelte';
-	import { onMount } from 'svelte';
-
-	onMount(() => {
-		if ('serviceWorker' in navigator) {
-			navigator.serviceWorker
-				.register('/service-worker.js')
-				.then((registration) => {
-					console.log('Service Worker terdaftar:', registration);
-				})
-				.catch((error) => {
-					console.error('Pendaftaran Service Worker gagal:', error);
-				});
-		}
-	});
 </script>
 
 <div

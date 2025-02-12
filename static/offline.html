@@ -31,7 +31,6 @@
       text-align: center;
       overflow: hidden;
       padding: 0 16px;
-      /* Beri sedikit padding di sisi kiri dan kanan */
     }
 
     .container {
@@ -72,15 +71,60 @@
       background: #e2e8f0;
       transform: scale(1.05);
     }
+
+    .loading-card {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f59e0b;
+      color: #121212;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: bold;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .loading-card.online {
+      background: #22c55e;
+      transform: translateX(-50%) scale(1.1);
+    }
   </style>
 </head>
 
 <body>
+  <!-- Loading Card -->
+  <div id="loading-card" class="loading-card">Mencari koneksi...</div>
+
   <div class="container">
     <h1>Ups! Nggak Ada Internet</h1>
     <p>Kamu lagi nyasar di dunia tanpa koneksi. Cek jaringan kamu dan balik lagi ke dunia nyata!</p>
     <button class="btn" onclick="location.reload()">Coba Lagi</button>
   </div>
+
+  <script>
+    const loadingCard = document.getElementById("loading-card");
+
+
+    if (navigator.onLine) {
+      loadingCard.textContent = "Koneksi stabil!";
+      loadingCard.classList.add("online");
+
+      setTimeout(() => {
+        loadingCard.style.display = "none";
+      }, 1500);
+    }
+
+    window.addEventListener("online", () => {
+      loadingCard.textContent = "Koneksi kembali!";
+      loadingCard.classList.add("online");
+
+      setTimeout(() => {
+        location.reload();
+      }, 1500);
+    });
+  </script>
 </body>
 
 </html>
