@@ -3,13 +3,50 @@
 	import type { ScheduleResponse } from './api/data/$types';
 	import { onMount } from 'svelte';
 	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
+	import { Alert, Button } from 'flowbite-svelte';
+	import { MoonStar } from 'lucide-svelte';
+	import { fly } from 'svelte/transition';
 
 	const data = writable<ScheduleResponse | null>(null);
 	const isLoading = writable(true);
 	const error = writable<string | null>(null);
 	const now = writable(new Date());
+	const ramadhanMessage = writable<string | null>(null);
+	const isRamadhan = writable(false);
+
+	const checkRamadhan = async () => {
+		const today = new Date();
+		const day = today.getDate();
+		const month = today.getMonth() + 1;
+		const year = today.getFullYear();
+
+		try {
+			const response = await fetch(`https://api.aladhan.com/v1/gToH?date=${day}-${month}-${year}`);
+			const data = await response.json();
+			const hijri = data.data.hijri;
+
+			if (hijri.month.number === 9) {
+				isRamadhan.set(true);
+				ramadhanMessage.set(`🌙 Selamat menjalankan ibadah puasa! Hari ke-${hijri.day} Ramadhan.`);
+			} else {
+				const ramadhanStart = new Date(today);
+				ramadhanStart.setDate(today.getDate() + (29 - hijri.day));
+				const daysUntilRamadhan = Math.ceil(
+					(ramadhanStart.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+				);
+
+				ramadhanMessage.set(
+					`Waktu cepat banget berlalu... <strong>${daysUntilRamadhan}</strong> hari lagi Ramadhan tiba. Yuk, mulai persiapkan hati dan niat terbaik kita! 💫`
+				);
+			}
+		} catch (error) {
+			ramadhanMessage.set('❗ Gagal mendapatkan informasi Ramadhan.');
+		}
+	};
 
 	onMount(async () => {
+		checkRamadhan();
+
 		try {
 			const res = await fetch(`/api/data`);
 			if (!res.ok) throw new Error('Gagal mengambil data');
@@ -91,6 +128,23 @@
 	<title>AWAN | TRPL 1A</title>
 	<meta name="description" content="Jadwal Mata Kuliah Hari Ini untuk TRPL 1A" />
 </svelte:head>
+
+{#if $ramadhanMessage}
+	<Alert
+		color="green"
+		dismissable={$isRamadhan}
+		border
+		class="mx-auto mb-5 flex max-w-4xl items-center justify-between"
+		transition={fly}
+		params={{ y: -100, duration: 500 }}
+		defaultClass="bg-green-100 dark:bg-background border-green-500 text-foreground p-4 gap-3 text-sm"
+	>
+		<div class="flex items-center gap-3">
+			<MoonStar class="h-10 w-10 text-green-600 sm:h-7 sm:w-7 md:h-7 md:w-7 lg:h-8 lg:w-8" />
+			<span>{@html $ramadhanMessage}</span>
+		</div>
+	</Alert>
+{/if}
 
 {#if $isLoading}
 	<div class="min-h-screen w-full bg-background p-1 sm:p-4 md:p-6">

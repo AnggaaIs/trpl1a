@@ -30,7 +30,7 @@
 
 <div class="flex min-h-[100vh] justify-center px-7 pt-20">
 	<div class="w-full max-w-[85rem]">
-		<ModeWatcher />
+		<ModeWatcher track={false} defaultMode={'dark'} />
 		{@render children()}
 	</div>
 </div>
