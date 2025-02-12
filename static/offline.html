@@ -119,18 +119,24 @@
       loadingCard.textContent = "Menghubungkan kembali! Mengambil IP...";
       loadingCard.classList.add("online");
 
+      const unstable = "Koneksi tidak stabil, IP tidak dapat diambil";
+
       try {
         const response = await fetch("https://api64.ipify.org?format=json");
         if (!response.ok) throw new Error("Respon tidak valid");
         const data = await response.json();
-        loadingCard.textContent = `Terhubung! IP: ${data.ip}`;
+        if (data.ip) {
+          loadingCard.textContent = `Terhubung! IP: ${data.ip}`;
+          location.reload();
+        } else {
+          loadingCard.textContent = unstable
+        }
+
       } catch (error) {
-        loadingCard.textContent = "Koneksi tidak stabil, IP tidak dapat diambil";
+        loadingCard.textContent = unstable
       }
 
-      setTimeout(() => {
-        location.reload();
-      }, 2000);
+
     });
   </script>
 </body>
