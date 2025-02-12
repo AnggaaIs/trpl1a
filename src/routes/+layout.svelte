@@ -2,21 +2,19 @@
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
 	import { Button } from '$lib/components/ui/button';
 	import '../app.css';
+	let { children } = $props();
 	import { MoonIcon, SunIcon } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import { dev } from '$app/environment';
 
 	onMount(() => {
 		if ('serviceWorker' in navigator) {
 			navigator.serviceWorker
-				.register('/service-worker.js', {
-					type: dev ? 'module' : 'classic'
-				})
+				.register('/service-worker.js')
 				.then((registration) => {
-					console.log('Service Worker terdaftar');
+					console.log('Service Worker terdaftar:', registration);
 				})
 				.catch((error) => {
-					console.error('Pendaftaran Service Worker gagal');
+					console.error('Pendaftaran Service Worker gagal:', error);
 				});
 		}
 	});
@@ -47,7 +45,7 @@
 <div class="flex min-h-[100vh] justify-center px-7 pt-20">
 	<div class="w-full max-w-[85rem]">
 		<ModeWatcher />
-		<slot />
+		{@render children()}
 	</div>
 </div>
 
@@ -59,5 +57,23 @@
 		<span class="text-red-500">❤️</span>
 		<span>for</span>
 		<span class="text-blue-500">AWAN ☁️</span>
+	</div>
+	<div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+		<span>Formulated in</span>
+		<a href="https://svelte.dev" class="text-sky-500 hover:underline">svelte</a>,
+		<a href="https://tailwindcss.com" class="text-teal-500 hover:underline">tailwindcss</a>, and
+		<a href="https://ui.shadcn.com" class="text-purple-500 hover:underline">shadcn/ui</a>.
+	</div>
+	<div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+		Follow us on
+		<a href="https://instagram.com/aonetrpl24" class="text-pink-500 hover:underline">
+			Instagram @aonetrpl24
+		</a>
+	</div>
+	<div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+		Source code available on
+		<a href="https://github.com/AnggaaIs/trpl1a" class="text-green-500 hover:underline">
+			GitHub
+		</a>.
 	</div>
 </footer>
