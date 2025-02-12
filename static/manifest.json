@@ -1,0 +1,16 @@
+{
+  "name": "TRPL 1A Jadwal Mata Kuliah",
+  "short_name": "TRPL 1A",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#fff",
+  "description": "Jadwal Mata Kuliah TRPL 1A",
+  "icons": [
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

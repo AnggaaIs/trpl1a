@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ups! Nggak Ada Internet</title>
+  <link rel="shortcut icon" href="/favicon.ico">
+  <style>
+    @font-face {
+      font-family: 'Outfit';
+      src: url('./Outfit-Regular.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #121212;
+      color: #f1f5f9;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 450px;
+      background: #1e1e1e;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 18px;
+      color: #cbd5e1;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #121212;
+      background: #f1f5f9;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn:hover {
+      background: #e2e8f0;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Ups! Nggak Ada Internet</h1>
+    <p>Kamu lagi nyasar di dunia tanpa koneksi. Cek jaringan kamu dan balik lagi ke dunia nyata!</p>
+    <button class="btn" onclick="location.reload()">Coba Lagi</button>
+  </div>
+</body>
+
+</html>

@@ -3,7 +3,23 @@
 	import { Button } from '$lib/components/ui/button';
 	import '../app.css';
 	import { MoonIcon, SunIcon } from 'lucide-svelte';
-	let { children } = $props();
+	import { onMount } from 'svelte';
+	import { dev } from '$app/environment';
+
+	onMount(() => {
+		if ('serviceWorker' in navigator) {
+			navigator.serviceWorker
+				.register('/service-worker.js', {
+					type: dev ? 'module' : 'classic'
+				})
+				.then((registration) => {
+					console.log('Service Worker terdaftar');
+				})
+				.catch((error) => {
+					console.error('Pendaftaran Service Worker gagal');
+				});
+		}
+	});
 </script>
 
 <div
@@ -20,13 +36,8 @@
 				class="flex items-center justify-center"
 				size="icon"
 			>
-				<SunIcon
-					class="h- block h-4 w-4 rotate-0 scale-100 transition-all dark:hidden dark:-rotate-90 dark:scale-0"
-				/>
-				<MoonIcon
-					class="hidden h-4 w-4 rotate-90 scale-0 transition-all dark:block dark:rotate-0 dark:scale-100"
-				/>
-
+				<SunIcon class="h-4 w-4 dark:hidden" />
+				<MoonIcon class="hidden h-4 w-4 dark:block" />
 				<span class="sr-only">Toggle Theme</span>
 			</Button>
 		</div>
@@ -36,7 +47,7 @@
 <div class="flex min-h-[100vh] justify-center px-7 pt-20">
 	<div class="w-full max-w-[85rem]">
 		<ModeWatcher />
-		{@render children()}
+		<slot />
 	</div>
 </div>
 
@@ -48,25 +59,5 @@
 		<span class="text-red-500">❤️</span>
 		<span>for</span>
 		<span class="text-blue-500">AWAN ☁️</span>
-	</div>
-	<div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-		<span>Formulated in</span>
-		<a href="https://svelte.dev" class="text-sky-500 hover:underline">svelte</a>,
-		<a href="https://tailwindcss.com" class="text-teal-500 hover:underline">tailwindcss</a>, and
-		<a href="https://ui.shadcn.com" class="text-purple-500 hover:underline">shadcn/ui</a>.
-	</div>
-
-	<div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-		Follow us on 
-		<a href="https://instagram.com/aonetrpl24" class="text-pink-500 hover:underline">
-			Instagram @aonetrpl24
-		</a>
-	</div>
-
-	<div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-		Source code available on 
-		<a href="https://github.com/AnggaaIs/trpl1a" class="text-green-500 hover:underline">
-			GitHub
-		</a>.
 	</div>
 </footer>
