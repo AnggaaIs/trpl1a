@@ -3,9 +3,12 @@
 	import type { ScheduleResponse } from "./api/data/$types";
 	import { onMount } from "svelte";
 	import Skeleton from "$lib/components/ui/skeleton/skeleton.svelte";
-	import { Alert, Button } from "flowbite-svelte";
-	import { MoonStar, CircleAlert } from "lucide-svelte";
+	import { Alert } from "flowbite-svelte";
+	import { MoonStar, CircleAlert, Pin } from "lucide-svelte";
 	import { fly } from "svelte/transition";
+	import Holidays from "date-holidays";
+
+	const hd = new Holidays("ID");
 
 	const data = writable<ScheduleResponse | null>(null);
 	const isLoading = writable(true);
@@ -13,6 +16,21 @@
 	const now = writable(new Date());
 	const ramadhanMessage = writable<string | null>(null);
 	const isRamadhan = writable(false);
+	const holidayMessage = writable<string | null>(null);
+	const isHoliday = writable(false);
+
+	const checkHoliday = async () => {
+		const today = new Date();
+		const isTodayHoliday = hd.isHoliday(today);
+
+		if (isTodayHoliday) {
+			isHoliday.set(true);
+			holidayMessage.set(
+				`🎉 Hari ini adalah hari libur nasional: <strong>${isTodayHoliday.map((x) => x.name).join(", ")}</strong>. Selamat menikmati hari libur!
+			`
+			);
+		}
+	};
 
 	const checkRamadhan = async () => {
 		const today = new Date();
@@ -45,7 +63,8 @@
 	};
 
 	onMount(async () => {
-		checkRamadhan();
+		await checkRamadhan();
+		await checkHoliday();
 
 		try {
 			const res = await fetch(`/api/data`);
@@ -79,7 +98,7 @@
 		endTime.setHours(endHour, endMinute, 0);
 		return $now > endTime;
 	});
-	$: allClassesFinished = finishedClasses.length === validSchedule.length;
+	$: allClassesFinished = $isHoliday || finishedClasses.length === validSchedule.length;
 
 	$: currentClass = validSchedule.find((matkul) => {
 		const [startHour, startMinute] = matkul.waktu!.start.split(":").map(Number);
@@ -142,6 +161,23 @@
 		<div class="flex items-center gap-3">
 			<MoonStar class="h-10 w-10 text-green-600 sm:h-6 sm:w-6 md:h-6 md:w-6 lg:h-6 lg:w-6" />
 			<span>{@html $ramadhanMessage}</span>
+		</div>
+	</Alert>
+{/if}
+
+{#if $holidayMessage}
+	<Alert
+		color="blue"
+		dismissable={$isHoliday}
+		border
+		class="mx-auto mb-5 flex max-w-4xl items-center justify-between"
+		transition={fly}
+		params={{ y: -100, duration: 500 }}
+		defaultClass="bg-blue-100 dark:bg-background border-blue-500 text-foreground p-4 gap-3 text-sm"
+	>
+		<div class="flex items-center gap-3">
+			<Pin class="h-10 w-10 text-blue-600 sm:h-6 sm:w-6 md:h-6 md:w-6 lg:h-6 lg:w-6" />
+			<span>{@html $holidayMessage}</span>
 		</div>
 	</Alert>
 {/if}
