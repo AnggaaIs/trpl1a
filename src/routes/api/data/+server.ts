@@ -4,6 +4,26 @@ import axios from "axios";
 import https from "https";
 import type { MatkulDetil, ScheduleEntry } from "./$types";
 
+const validKelasRegex = /^[1-4][A-Da-d]$/;
+const validProdi = [
+	{
+		name: "Teknologi Rekayasa Perangkat Lunak",
+		kode: "RPL"
+	},
+	{
+		name: "Manajemen Informatika",
+		kode: "MI"
+	},
+	{
+		name: "Teknik Komputer",
+		kode: "TK"
+	},
+	{
+		name: "Animasi",
+		kode: "ANM"
+	}
+];
+
 const parseSchedule = (detil: string[]): ScheduleEntry => {
 	if (detil.length < 4) {
 		return { mata_kuliah: { kode: "-", nama: "-" }, jenis: "MKDU", dosen: [], ruang: "-" };
@@ -37,15 +57,69 @@ const parseSchedule = (detil: string[]): ScheduleEntry => {
 	};
 };
 
-export const GET: RequestHandler = async () => {
+export const GET: RequestHandler = async ({ url: OriginURL }) => {
 	const url =
 		"https://presensi.pnp.ac.id/ti/TI%20Ganjil%202024-2025%20noAK%20v1.1_subgroups_days_horizontal.html";
+
+	const kelas = OriginURL.searchParams.get("kelas");
+	const prodi = OriginURL.searchParams.get("prodi");
+
+	if (
+		!kelas ||
+		!prodi ||
+		!validKelasRegex.test(kelas.toLowerCase()) ||
+		!validProdi.some((p) => p.kode.toLowerCase() === prodi.toLowerCase())
+	) {
+		return new Response(
+			JSON.stringify(
+				{
+					statusCode: 400,
+					message: "Invalid Parameter",
+					details: {
+						kelas: "Kelas dimulai dengan angka lalu diikuti huruf, misal 1A",
+						dataProdi: validProdi
+					}
+				},
+				null,
+				2
+			),
+			{
+				headers: { "Content-Type": "application/json" }
+			}
+		);
+	}
 
 	const agent = new https.Agent({ rejectUnauthorized: false });
 	const { data: html } = await axios.get(url, { httpsAgent: agent });
 	const updatedHtml = html.replaceAll("<!-- span -->", "<td>---</td>");
 	const $ = cheerio.load(updatedHtml);
-	const table = $("#table_22");
+
+	function getTableNumber(programCode: string, classCode: string) {
+		programCode = programCode.toUpperCase();
+		classCode = classCode.toUpperCase();
+		const regex = new RegExp(`\\d*${programCode}-${classCode}-REGULER Grup Otomat`);
+		const link = $("a")
+			.filter((i, el) => regex.test($(el).text()))
+			.attr("href");
+
+		if (link) {
+			const match = link.match(/#table_(\d+)/);
+			return match ? match[1] : null;
+		}
+		return null;
+	}
+
+	const tableNumber = getTableNumber(prodi, kelas);
+	if (!tableNumber) {
+		return new Response(
+			JSON.stringify({ statusCode: 404, message: "Not Found", data: null }, null, 2),
+			{
+				headers: { "Content-Type": "application/json" }
+			}
+		);
+	}
+
+	const table = $(`#table_${tableNumber}`);
 
 	const schedule: Record<
 		string,
@@ -151,7 +225,19 @@ export const GET: RequestHandler = async () => {
 	});
 
 	return new Response(
-		JSON.stringify({ statusCode: 200, message: "SUCCESS", data: schedule }, null, 2),
+		JSON.stringify(
+			{
+				statusCode: 200,
+				message: "SUCCESS",
+				kalas: {
+					prodi: validProdi.find((p) => p.kode.toLowerCase() === prodi.toLowerCase())?.name,
+					kelas: kelas.toUpperCase()
+				},
+				data: schedule
+			},
+			null,
+			2
+		),
 		{
 			headers: { "Content-Type": "application/json" }
 		}
