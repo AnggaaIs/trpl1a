@@ -67,7 +67,7 @@
 		await checkHoliday();
 
 		try {
-			const res = await fetch(`/api/data?prodi=TRPL&kelas=1A`);
+			const res = await fetch(`/api/data?prodi=RPL&kelas=1A`);
 			if (!res.ok) throw new Error("Gagal mengambil data");
 
 			const result: ScheduleResponse = await res.json();
