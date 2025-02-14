@@ -90,7 +90,7 @@
 		currentTime = n.toLocaleTimeString("en-US", { hour12: false, timeZone: "Asia/Jakarta" });
 	});
 
-	$: scheduleToday = $data?.data?.[today] || [];
+	$: scheduleToday = $data?.data?.matkul?.[today] || [];
 	$: validSchedule = scheduleToday.filter((matkul) => matkul.waktu?.start !== "00:00");
 	$: finishedClasses = validSchedule.filter((matkul) => {
 		const [endHour, endMinute] = matkul.waktu!.end.split(":").map(Number);
@@ -328,6 +328,16 @@
 						{/each}
 					</div>
 				</div>
+				{#if $data?.data.lastUpdate}
+					<p class="text-center text-sm text-muted-foreground">
+						Terakhir diperbarui: {new Date($data!.data.lastUpdate).toLocaleString("id-ID", {
+							weekday: "long",
+							day: "numeric",
+							month: "long",
+							year: "numeric"
+						})}
+					</p>
+				{/if}
 			{:else if allClassesFinished}
 				<div class="flex flex-col items-center space-y-6 text-center">
 					<div class="flex flex-col items-center gap-4 rounded-xl border-2 p-4 md:flex-row">

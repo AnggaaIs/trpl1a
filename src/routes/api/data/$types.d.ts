@@ -20,7 +20,10 @@ type ScheduleEntry = {
 type ScheduleResponse = {
 	statusCode: number;
 	message: string;
-	data: Record<string, ScheduleEntry[]>;
+	data: {
+		matkul: Record<string, ScheduleEntry[]>;
+		lastUpdate: Date | null;
+	};
 };
 
 export type PageServerLoad = Kit.ServerLoad<RouteParams>;

@@ -2,7 +2,7 @@ import type { RequestHandler } from "@sveltejs/kit";
 import * as cheerio from "cheerio";
 import axios from "axios";
 import https from "https";
-import type { MatkulDetil, ScheduleEntry } from "./$types";
+import type { MatkulDetil, ScheduleEntry, ScheduleResponse } from "./$types";
 
 const validKelasRegex = /^[1-4][A-Da-d]$/;
 const validProdi = [
@@ -93,6 +93,22 @@ export const GET: RequestHandler = async ({ url: OriginURL }) => {
 	const { data: html } = await axios.get(url, { httpsAgent: agent });
 	const updatedHtml = html.replaceAll("<!-- span -->", "<td>---</td>");
 	const $ = cheerio.load(updatedHtml);
+	let updatedTime: Date | null = null;
+
+	function parseUpdate(text: string): Date | null {
+		const t = text.split(" ");
+		let date: Date | null = null;
+
+		for (const i of t) {
+			if (i.includes("/")) {
+				const [day, month, year] = i.split("/").map(Number);
+				const fullYear = year < 100 ? 2000 + year : year;
+				date = new Date(fullYear, month - 1, day);
+			}
+		}
+
+		return date;
+	}
 
 	function getTableNumber(programCode: string, classCode: string) {
 		programCode = programCode.toUpperCase();
@@ -197,6 +213,10 @@ export const GET: RequestHandler = async ({ url: OriginURL }) => {
 			if (text !== "---") {
 				const detil = $(cell).html()?.split("<br>") ?? [];
 
+				if (detil[0].startsWith("Jadwal")) {
+					updatedTime = parseUpdate(detil[0]);
+				}
+
 				const parsed = parseSchedule(detil);
 				const { mata_kuliah, dosen, ruang, jenis } = parsed;
 
@@ -233,8 +253,11 @@ export const GET: RequestHandler = async ({ url: OriginURL }) => {
 					prodi: validProdi.find((p) => p.kode.toLowerCase() === prodi.toLowerCase())?.name,
 					kelas: kelas.toUpperCase()
 				},
-				data: schedule
-			},
+				data: {
+					matkul: schedule,
+					lastUpdate: updatedTime
+				}
+			} as ScheduleResponse,
 			null,
 			2
 		),
