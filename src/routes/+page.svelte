@@ -277,7 +277,8 @@
 						<h2 class="text-2xl font-bold text-primary">⏳ Sedang Berlangsung</h2>
 						<p class="text-lg font-medium">{formatedMatkul(currentClass.mata_kuliah.nama)}</p>
 						<p class="text-sm text-muted-foreground">
-							{currentClass.waktu!.start} - {currentClass.waktu!.end} | {currentClass.ruang}
+							{currentClass.waktu!.start} - {currentClass.waktu!.end} ({currentClass.waktu
+								?.durasi ?? 1} SKS) | {currentClass.ruang}
 						</p>
 						<p class="text-md text-warning-foreground font-medium">
 							🕒 {timeLeft(currentClass.waktu!.end)}
@@ -293,7 +294,8 @@
 						<h2 class="text-2xl font-bold text-primary">⏭️ Mata Kuliah Berikutnya</h2>
 						<p class="text-lg font-medium">{formatedMatkul(nextClass.mata_kuliah.nama)}</p>
 						<p class="text-sm text-muted-foreground">
-							{nextClass.waktu!.start} - {nextClass.waktu!.end} | {nextClass.ruang}
+							{nextClass.waktu!.start} - {nextClass.waktu!.end} ({nextClass.waktu?.durasi ?? 1} SKS)
+							| {nextClass.ruang}
 						</p>
 						<p class="text-md text-info-foreground font-medium">
 							🕒 Dimulai dalam {timeLeft(nextClass.waktu!.start)}
@@ -315,7 +317,8 @@
 									{formatedMatkul(matkul.mata_kuliah.nama)}
 								</h3>
 								<p class="text-sm text-muted-foreground">
-									🕒 {matkul.waktu!.start} - {matkul.waktu!.end} | 🏫 {matkul.ruang}
+									🕒 {matkul.waktu!.start} - {matkul.waktu!.end} ({matkul.waktu?.durasi ?? 1} SKS) |
+									🏫 {matkul.ruang}
 								</p>
 								<p class="text-sm text-muted-foreground">
 									👨‍🏫 {matkul.dosen.map((x) => toProperCase(x)).join(", ")}
