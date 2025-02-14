@@ -153,7 +153,7 @@
 		color="green"
 		dismissable={$isRamadhan}
 		border
-		class="mx-auto mb-5 flex max-w-4xl items-center justify-between"
+		class="mx-auto mb-5 flex max-w-5xl items-center justify-between"
 		transition={fly}
 		params={{ y: -100, duration: 500 }}
 		defaultClass="bg-green-100 dark:bg-background border-green-500 text-foreground p-4 gap-3 text-sm"
@@ -170,7 +170,7 @@
 		color="blue"
 		dismissable={$isHoliday}
 		border
-		class="mx-auto mb-5 flex max-w-4xl items-center justify-between"
+		class="mx-auto mb-5 flex max-w-5xl items-center justify-between"
 		transition={fly}
 		params={{ y: -100, duration: 500 }}
 		defaultClass="bg-blue-100 dark:bg-background border-blue-500 text-foreground p-4 gap-3 text-sm"
@@ -187,7 +187,7 @@
 		color="red"
 		dismissable
 		border
-		class="mx-auto mb-5 flex max-w-4xl items-center justify-between"
+		class="mx-auto mb-5 flex max-w-5xl items-center justify-between"
 		transition={fly}
 		params={{ y: -100, duration: 500 }}
 		defaultClass="bg-red-100 dark:bg-background border-red-500 text-foreground p-4 gap-3 text-sm"
