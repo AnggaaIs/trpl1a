@@ -14,26 +14,33 @@
 	const isLoading = writable(true);
 	const error = writable<string | null>(null);
 	const now = writable(new Date());
-	const ramadhanMessage = writable<string | null>(null);
-	const isRamadhan = writable(false);
-	const holidayMessage = writable<string | null>(null);
-	const isHoliday = writable(false);
 
-	const checkHoliday = async () => {
+	const status = writable<{
+		isRamadhan?: boolean;
+		ramadhanMessage?: string;
+		isHoliday?: boolean;
+		holidayMessage?: string;
+	}>({
+		isRamadhan: false,
+		ramadhanMessage: "",
+		isHoliday: false,
+		holidayMessage: ""
+	});
+
+	const checkAll = async () => {
+		//holiday
 		const today = new Date();
 		const isTodayHoliday = hd.isHoliday(today);
 
 		if (isTodayHoliday) {
-			isHoliday.set(true);
-			holidayMessage.set(
-				`🎉 Hari ini adalah hari libur nasional: <strong>${isTodayHoliday.map((x) => x.name).join(", ")}</strong>. Selamat menikmati hari libur!
-			`
-			);
+			status.set({
+				isHoliday: true,
+				holidayMessage: `🎉 Hari ini adalah hari libur nasional: ${isTodayHoliday.map((x) => x.name).join(", ")}. Selamat menikmati hari libur!`
+			});
 		}
-	};
 
-	const checkRamadhan = async () => {
-		const today = new Date();
+		//ramadhan
+
 		const day = today.getDate();
 		const month = today.getMonth() + 1;
 		const year = today.getFullYear();
@@ -44,8 +51,10 @@
 			const hijri = data.data.hijri;
 
 			if (hijri.month.number === 9) {
-				isRamadhan.set(true);
-				ramadhanMessage.set(`🌙 Selamat menjalankan ibadah puasa! Hari ke-${hijri.day} Ramadhan.`);
+				status.set({
+					isRamadhan: true,
+					ramadhanMessage: `🌙 Selamat menjalankan ibadah puasa! Hari ke-${hijri.day} Ramadhan.`
+				});
 			} else {
 				const ramadhanStart = new Date(today);
 				ramadhanStart.setDate(today.getDate() + (29 - hijri.day));
@@ -53,18 +62,21 @@
 					(ramadhanStart.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
 				);
 
-				ramadhanMessage.set(
-					`Waktu cepat banget berlalu... <strong>${daysUntilRamadhan}</strong> hari lagi Ramadhan tiba. Yuk, mulai persiapkan hati dan niat terbaik kita! 💫`
-				);
+				status.set({
+					isRamadhan: false,
+					ramadhanMessage: `Waktu cepat banget berlalu... <strong>${daysUntilRamadhan}</strong> hari lagi Ramadhan tiba. Yuk, mulai persiapkan hati dan niat terbaik kita! 💫`
+				});
 			}
 		} catch (error) {
-			ramadhanMessage.set("❗ Gagal mendapatkan informasi Ramadhan.");
+			status.set({
+				isRamadhan: false,
+				ramadhanMessage: "❗ Gagal mendapatkan informasi Ramadhan."
+			});
 		}
 	};
 
 	onMount(async () => {
-		await checkRamadhan();
-		await checkHoliday();
+		await checkAll();
 
 		try {
 			const res = await fetch(`/api/data?prodi=RPL&kelas=1A`);
@@ -98,7 +110,7 @@
 		endTime.setHours(endHour, endMinute, 0);
 		return $now > endTime;
 	});
-	$: allClassesFinished = $isHoliday || finishedClasses.length === validSchedule.length;
+	$: allClassesFinished = $status.isHoliday || finishedClasses.length === validSchedule.length;
 
 	$: currentClass = validSchedule.find((matkul) => {
 		const [startHour, startMinute] = matkul.waktu!.start.split(":").map(Number);
@@ -148,10 +160,10 @@
 	<meta name="description" content="Jadwal Mata Kuliah Hari Ini untuk TRPL 1A" />
 </svelte:head>
 
-{#if $ramadhanMessage}
+{#if $status.ramadhanMessage}
 	<Alert
 		color="green"
-		dismissable={$isRamadhan}
+		dismissable={$status.isRamadhan}
 		border
 		class="mx-auto mb-5 flex max-w-5xl items-center justify-between"
 		transition={fly}
@@ -160,15 +172,15 @@
 	>
 		<div class="flex items-center gap-3">
 			<MoonStar class="h-10 w-10 text-green-600 sm:h-6 sm:w-6 md:h-6 md:w-6 lg:h-6 lg:w-6" />
-			<span>{@html $ramadhanMessage}</span>
+			<span>{@html $status.ramadhanMessage}</span>
 		</div>
 	</Alert>
 {/if}
 
-{#if $holidayMessage}
+{#if $status.holidayMessage}
 	<Alert
 		color="blue"
-		dismissable={$isHoliday}
+		dismissable={$status.isHoliday}
 		border
 		class="mx-auto mb-5 flex max-w-5xl items-center justify-between"
 		transition={fly}
@@ -177,7 +189,7 @@
 	>
 		<div class="flex items-center gap-3">
 			<Pin class="h-10 w-10 text-blue-600 sm:h-6 sm:w-6 md:h-6 md:w-6 lg:h-6 lg:w-6" />
-			<span>{@html $holidayMessage}</span>
+			<span>{@html $status.holidayMessage}</span>
 		</div>
 	</Alert>
 {/if}
