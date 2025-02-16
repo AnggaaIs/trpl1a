@@ -59,7 +59,7 @@ const parseSchedule = (detil: string[]): ScheduleEntry => {
 
 export const GET: RequestHandler = async ({ url: OriginURL }) => {
 	const url =
-		"https://presensi.pnp.ac.id/ti/TI%20Ganjil%202024-2025%20noAK%20v1.1_subgroups_days_horizontal.html";
+		"https://presensi.pnp.ac.id/ti/TI%20Genap%202024-2025%20noAK%20v1.1_subgroups_days_horizontal.html";
 
 	const kelas = OriginURL.searchParams.get("kelas");
 	const prodi = OriginURL.searchParams.get("prodi");
