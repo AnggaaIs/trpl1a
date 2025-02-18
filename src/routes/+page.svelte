@@ -79,7 +79,7 @@
 		await checkAll();
 
 		try {
-			const res = await fetch(`/api/data?prodi=RPL&kelas=1A`);
+			const res = await fetch(`/api/data?prodi=RPL&kelas=2A`);
 			if (!res.ok) throw new Error("Gagal mengambil data");
 
 			const result: ScheduleResponse = await res.json();
