@@ -32,8 +32,9 @@
 		const today = new Date();
 		const isTodayHoliday = hd.isHoliday(today);
 
-		if (isTodayHoliday) {
+		if (isTodayHoliday instanceof Array && isTodayHoliday.length > 0) {
 			status.set({
+				...$status,
 				isHoliday: true,
 				holidayMessage: `🎉 Hari ini adalah hari libur nasional: ${isTodayHoliday.map((x) => x.name).join(", ")}. Selamat menikmati hari libur!`
 			});
@@ -52,6 +53,7 @@
 
 			if (hijri.month.number === 9) {
 				status.set({
+					...$status,
 					isRamadhan: true,
 					ramadhanMessage: `🌙 Selamat menjalankan ibadah puasa! Hari ke-${hijri.day} Ramadhan.`
 				});
@@ -63,12 +65,14 @@
 				);
 
 				status.set({
+					...$status,
 					isRamadhan: false,
 					ramadhanMessage: `Waktu cepat banget berlalu... <strong>${daysUntilRamadhan}</strong> hari lagi Ramadhan tiba. Yuk, mulai persiapkan hati dan niat terbaik kita! 💫`
 				});
 			}
 		} catch (error) {
 			status.set({
+				...$status,
 				isRamadhan: false,
 				ramadhanMessage: "❗ Gagal mendapatkan informasi Ramadhan."
 			});
@@ -110,6 +114,7 @@
 		endTime.setHours(endHour, endMinute, 0);
 		return $now > endTime;
 	});
+
 	$: allClassesFinished = $status.isHoliday || finishedClasses.length === validSchedule.length;
 
 	$: currentClass = validSchedule.find((matkul) => {
@@ -177,7 +182,7 @@
 	</Alert>
 {/if}
 
-{#if $status.holidayMessage}
+{#if $status.isHoliday}
 	<Alert
 		color="blue"
 		dismissable={$status.isHoliday}

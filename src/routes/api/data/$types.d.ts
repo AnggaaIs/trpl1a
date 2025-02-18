@@ -23,6 +23,7 @@ type ScheduleResponse = {
 	data: {
 		matkul: Record<string, ScheduleEntry[]>;
 		lastUpdate: Date | null;
+		semester: "Ganjil" | "Genap";
 	};
 };
 

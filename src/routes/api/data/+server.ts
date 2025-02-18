@@ -57,9 +57,27 @@ const parseSchedule = (detil: string[]): ScheduleEntry => {
 	};
 };
 
+const parseURL = (html: string) => {
+	const $ = cheerio.load(html);
+	//th
+	const table = $("table");
+	const rows = table.find("tr");
+	let url = "";
+
+	rows.each((i, el) => {
+		const row = $(el);
+		const cells = row.find("th, td");
+
+		if ($(cells[1]).find("a").attr("href")?.includes("subgroups_days_horizontal")) {
+			url = $(cells[1]).find("a").attr("href") ?? "";
+		}
+	});
+
+	return url;
+};
+
 export const GET: RequestHandler = async ({ url: OriginURL }) => {
-	const url =
-		"https://presensi.pnp.ac.id/ti/TI%20Genap%202024-2025%20v1.3_subgroups_days_horizontal.html";
+	const urlBase = "https://presensi.pnp.ac.id/ti/";
 
 	const kelas = OriginURL.searchParams.get("kelas");
 	const prodi = OriginURL.searchParams.get("prodi");
@@ -90,9 +108,19 @@ export const GET: RequestHandler = async ({ url: OriginURL }) => {
 	}
 
 	const agent = new https.Agent({ rejectUnauthorized: false });
-	const { data: html } = await axios.get(url, { httpsAgent: agent });
+	const { data: html } = await axios.get(urlBase, { httpsAgent: agent });
 	const updatedHtml = html.replaceAll("<!-- span -->", "<td>---</td>");
-	const $ = cheerio.load(updatedHtml);
+
+	const url =
+		parseURL(updatedHtml) === ""
+			? "https://presensi.pnp.ac.id/ti/TI%20Genap%202024-2025%20v1.3_subgroups_days_horizontal.html"
+			: `${urlBase}${parseURL(updatedHtml)}`;
+
+	const { data: updatedHtml2 } = await axios.get(url, { httpsAgent: agent });
+	const updatedHtml2Fixed = updatedHtml2.replaceAll("<!-- span -->", "<td>---</td>");
+	const semester: "Ganjil" | "Genap" = url.includes("Ganjil") ? "Ganjil" : "Genap";
+
+	const $ = cheerio.load(updatedHtml2Fixed);
 	let updatedTime: Date | null = null;
 
 	function parseUpdate(text: string): Date | null {
@@ -255,7 +283,8 @@ export const GET: RequestHandler = async ({ url: OriginURL }) => {
 				},
 				data: {
 					matkul: schedule,
-					lastUpdate: updatedTime
+					lastUpdate: updatedTime,
+					semester: semester
 				}
 			} as ScheduleResponse,
 			null,
