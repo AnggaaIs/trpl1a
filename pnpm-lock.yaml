@@ -23,9 +23,6 @@ importers:
       fast-xml-parser:
         specifier: ^4.5.1
         version: 4.5.1
-      lucide-svelte:
-        specifier: ^0.475.0
-        version: 0.475.0(svelte@5.19.9)
       mode-watcher:
         specifier: ^0.5.1
         version: 0.5.1(svelte@5.19.9)
@@ -75,6 +72,9 @@ importers:
       globals:
         specifier: ^15.14.0
         version: 15.14.0
+      lucide-svelte:
+        specifier: ^0.475.0
+        version: 0.475.0(svelte@5.19.9)
       prettier:
         specifier: ^3.4.2
         version: 3.5.0

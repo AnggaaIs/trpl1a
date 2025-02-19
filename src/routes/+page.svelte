@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { writable } from "svelte/store";
 	import type { ScheduleResponse } from "./api/data/$types";
-	import { onMount } from "svelte";
+	import { onDestroy, onMount } from "svelte";
 	import Skeleton from "$lib/components/ui/skeleton/skeleton.svelte";
 	import { Alert } from "flowbite-svelte";
 	import { MoonStar, CircleAlert, Pin } from "lucide-svelte";
@@ -33,11 +33,11 @@
 		const isTodayHoliday = hd.isHoliday(today);
 
 		if (isTodayHoliday instanceof Array && isTodayHoliday.length > 0) {
-			status.set({
-				...$status,
+			status.update((s) => ({
+				...s,
 				isHoliday: true,
-				holidayMessage: `🎉 Hari ini adalah hari libur nasional: ${isTodayHoliday.map((x) => x.name).join(", ")}. Selamat menikmati hari libur!`
-			});
+				holidayMessage: `🎉 Hari ini adalah hari libur nasional: <strong>${isTodayHoliday[0].name}</strong>. Selamat menikmati hari libur!`
+			}));
 		}
 
 		//ramadhan
@@ -52,11 +52,11 @@
 			const hijri = data.data.hijri;
 
 			if (hijri.month.number === 9) {
-				status.set({
-					...$status,
+				status.update((s) => ({
+					...s,
 					isRamadhan: true,
 					ramadhanMessage: `🌙 Selamat menjalankan ibadah puasa! Hari ke-${hijri.day} Ramadhan.`
-				});
+				}));
 			} else {
 				const ramadhanStart = new Date(today);
 				ramadhanStart.setDate(today.getDate() + (29 - hijri.day));
@@ -64,40 +64,50 @@
 					(ramadhanStart.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
 				);
 
-				status.set({
-					...$status,
+				status.update((s) => ({
+					...s,
 					isRamadhan: false,
 					ramadhanMessage: `Waktu cepat banget berlalu... <strong>${daysUntilRamadhan}</strong> hari lagi Ramadhan tiba. Yuk, mulai persiapkan hati dan niat terbaik kita! 💫`
-				});
+				}));
 			}
 		} catch (error) {
-			status.set({
-				...$status,
+			status.update((s) => ({
+				...s,
 				isRamadhan: false,
 				ramadhanMessage: "❗ Gagal mendapatkan informasi Ramadhan."
-			});
+			}));
 		}
 	};
 
 	onMount(async () => {
 		await checkAll();
 
-		try {
-			const res = await fetch(`/api/data?prodi=RPL&kelas=1A`);
-			if (!res.ok) throw new Error("Gagal mengambil data");
+		const fetchData = async () => {
+			try {
+				const url = new URL("/api/data", window.location.origin);
+				const params = new URLSearchParams({ prodi: "RPL", kelas: "1A" });
+				url.search = params.toString();
 
-			const result: ScheduleResponse = await res.json();
-			data.set(result);
-		} catch (err: any) {
-			error.set(err.message);
-		} finally {
-			isLoading.set(false);
-		}
+				const res = await fetch(url.toString());
+				if (!res.ok) throw new Error("Gagal mengambil data");
+				data.set(await res.json());
+			} catch (err: any) {
+				error.set(err.message);
+			} finally {
+				isLoading.set(false);
+			}
+		};
+
+		fetchData();
 	});
 
-	setInterval(() => {
+	let interval = setInterval(() => {
 		now.set(new Date());
 	}, 1000);
+
+	onDestroy(() => {
+		clearInterval(interval);
+	});
 
 	const today = new Date().toLocaleDateString("id-ID", { weekday: "long" });
 
@@ -280,6 +290,7 @@
 				<p class="text-lg text-muted-foreground">
 					🕒 Waktu Sekarang: {currentTime}
 				</p>
+				<p class="text-md text-muted-foreground">📚 Semester: {$data?.data.semester}</p>
 				<p class="text-md text-muted-foreground">
 					📚 Total Mata Kuliah Hari Ini: {validSchedule.length}
 				</p>
@@ -308,7 +319,7 @@
 
 				{#if nextClass}
 					<div class="relative space-y-2 overflow-hidden rounded-xl border bg-accent p-6 shadow-md">
-						<h2 class="text-2xl font-bold text-primary">⏭️ Mata Kuliah Berikutnya</h2>
+						<h2 class="text-primaary text-2xl font-bold">⏭️ Mata Kuliah Berikutnya</h2>
 						<p class="text-lg font-medium">{formatedMatkul(nextClass.mata_kuliah.nama)}</p>
 						<p class="text-sm text-muted-foreground">
 							{nextClass.waktu!.start} - {nextClass.waktu!.end} ({nextClass.waktu?.durasi ?? 1} SKS)

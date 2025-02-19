@@ -38,7 +38,7 @@
 <footer
 	class="mt-10 flex w-full flex-col items-center justify-center border-t px-5 py-6 text-center backdrop-blur-sm"
 >
-	<div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+	<div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
 		<span>Made by</span>
 		<span class="text-red-500">❤️</span>
 		<span>for</span>

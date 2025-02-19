@@ -29,6 +29,7 @@
 		"flowbite": "^3.1.2",
 		"flowbite-svelte": "^0.47.4",
 		"globals": "^15.14.0",
+		"lucide-svelte": "^0.475.0",
 		"prettier": "^3.4.2",
 		"prettier-plugin-svelte": "^3.3.3",
 		"prettier-plugin-tailwindcss": "^0.6.10",
@@ -49,7 +50,6 @@
 		"cheerio": "^1.0.0",
 		"date-holidays": "^3.23.21",
 		"fast-xml-parser": "^4.5.1",
-		"lucide-svelte": "^0.475.0",
 		"mode-watcher": "^0.5.1"
 	}
 }
