@@ -622,12 +622,12 @@ export const matkul = {
 						nama: "Bahasa Inggris Scientific",
 						sks: {
 							total: 2,
-							teori: 2,
-							praktek: 0
+							teori: 0,
+							praktek: 2
 						},
 						jam: {
-							teori: 6,
-							praktek: 0
+							teori: 0,
+							praktek: 6
 						},
 						rps: "#"
 					}
