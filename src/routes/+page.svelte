@@ -7,6 +7,7 @@
 	import { MoonStar, CircleAlert, Pin } from "lucide-svelte";
 	import { fly } from "svelte/transition";
 	import Holidays from "date-holidays";
+	import Button from "$lib/components/ui/button/button.svelte";
 
 	const hd = new Holidays("ID");
 
@@ -14,6 +15,7 @@
 	const isLoading = writable(true);
 	const error = writable<string | null>(null);
 	const now = writable(new Date());
+	const source = writable<string | null>("API");
 
 	const status = writable<{
 		isRamadhan?: boolean;
@@ -79,25 +81,49 @@
 		}
 	};
 
-	onMount(async () => {
-		await checkAll();
+	const fetchData = async () => {
+		const cacheKey = "schedule_cache";
+		const cacheExpiry = 60 * 60 * 1000;
 
-		const fetchData = async () => {
-			try {
-				const url = new URL("/api/data", window.location.origin);
-				const params = new URLSearchParams({ prodi: "RPL", kelas: "1A" });
-				url.search = params.toString();
-
-				const res = await fetch(url.toString());
-				if (!res.ok) throw new Error("Gagal mengambil data");
-				data.set(await res.json());
-			} catch (err: any) {
-				error.set(err.message);
-			} finally {
+		const cached = localStorage.getItem(cacheKey);
+		if (cached) {
+			const { timestamp, data: cachedData } = JSON.parse(cached);
+			if (Date.now() - timestamp < cacheExpiry) {
+				data.set(cachedData);
+				source.set("Cache");
 				isLoading.set(false);
+				return;
 			}
-		};
+		}
 
+		try {
+			const url = new URL("/api/data", window.location.origin);
+			const params = new URLSearchParams({ prodi: "RPL", kelas: "1A" });
+			url.search = params.toString();
+
+			const res = await fetch(url.toString());
+			if (!res.ok) throw new Error("Gagal mengambil data");
+
+			const responseData = await res.json();
+			data.set(responseData);
+
+			localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), data: responseData }));
+		} catch (err: any) {
+			error.set(err.message);
+		} finally {
+			isLoading.set(false);
+		}
+	};
+
+	function clearCache() {
+		localStorage.removeItem("schedule_cache");
+		isLoading.set(true);
+		source.set("API");
+		fetchData();
+	}
+
+	onMount(async () => {
+		checkAll();
 		fetchData();
 	});
 
@@ -180,7 +206,7 @@
 		color="green"
 		dismissable={$status.isRamadhan}
 		border
-		class="mx-auto mb-5 flex max-w-5xl items-center justify-between"
+		class="mx-auto flex max-w-5xl items-center justify-between"
 		transition={fly}
 		params={{ y: -100, duration: 500 }}
 		defaultClass="bg-green-100 dark:bg-background border-green-500 text-foreground p-4 gap-3 text-sm"
@@ -238,8 +264,15 @@
 	</Alert>
 {/if}
 
+{#if !$isLoading}
+	<div class="flex items-center justify-center space-x-2 py-4 text-sm text-muted-foreground">
+		<p>Source: {$source}</p>
+		<Button variant="outline" class="h-auto px-2 py-1 text-xs" onclick={clearCache}>Refresh</Button>
+	</div>
+{/if}
+
 {#if $isLoading}
-	<div class="min-h-screen w-full bg-background p-1 sm:p-4 md:p-6">
+	<div class="min-h-screen w-full bg-background p-4 sm:p-4 md:p-6">
 		<div class="mx-auto max-w-5xl space-y-6">
 			<Skeleton class="h-8 w-2/3" />
 			<Skeleton class="h-6 w-1/2" />
@@ -283,7 +316,7 @@
 		</div>
 	</div>
 {:else}
-	<div class="min-h-screen w-full bg-background p-1 sm:p-4 md:p-6">
+	<div class="min-h-screen w-full bg-background">
 		<div class="mx-auto max-w-5xl space-y-6">
 			{#if validSchedule.length > 0 && !allClassesFinished}
 				<h1 class="text-3xl font-bold text-primary">📅 Jadwal Hari Ini ({today})</h1>
