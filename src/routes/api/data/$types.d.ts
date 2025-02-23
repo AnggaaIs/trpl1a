@@ -15,6 +15,7 @@ type ScheduleEntry = {
 	dosen: string[];
 	ruang: string;
 	jenis: string;
+	online?: boolean;
 };
 
 type ScheduleResponse = {

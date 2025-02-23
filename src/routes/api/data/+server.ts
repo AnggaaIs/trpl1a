@@ -53,7 +53,8 @@ const parseSchedule = (detil: string[]): ScheduleEntry => {
 		},
 		jenis,
 		dosen,
-		ruang
+		ruang,
+		online: ruang.endsWith("_B")
 	};
 };
 
@@ -165,20 +166,7 @@ export const GET: RequestHandler = async ({ url: OriginURL }) => {
 
 	const table = $(`#table_${tableNumber}`);
 
-	const schedule: Record<
-		string,
-		{
-			waktu: {
-				start: string;
-				end: string;
-				durasi: number;
-			};
-			mata_kuliah: MatkulDetil;
-			dosen: string[];
-			ruang: string;
-			jenis: string;
-		}[]
-	> = {};
+	const schedule: Record<string, ScheduleEntry[]> = {};
 	const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
 	for (const day of days) {
@@ -246,7 +234,7 @@ export const GET: RequestHandler = async ({ url: OriginURL }) => {
 				}
 
 				const parsed = parseSchedule(detil);
-				const { mata_kuliah, dosen, ruang, jenis } = parsed;
+				const { mata_kuliah, dosen, ruang, jenis, online } = parsed;
 
 				if (mata_kuliah.kode === "-") return;
 
@@ -266,7 +254,8 @@ export const GET: RequestHandler = async ({ url: OriginURL }) => {
 					mata_kuliah,
 					dosen,
 					ruang,
-					jenis
+					jenis,
+					online
 				});
 			}
 		});

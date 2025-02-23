@@ -380,6 +380,7 @@
 								<p class="text-sm text-muted-foreground">
 									🕒 {matkul.waktu!.start} - {matkul.waktu!.end} ({matkul.waktu?.durasi ?? 1} SKS) |
 									🏫 {matkul.ruang}
+									{matkul.online ? "- Online" : ""}
 								</p>
 								<p class="text-sm text-muted-foreground">
 									👨‍🏫 {matkul.dosen.map((x) => toProperCase(x)).join(", ")}
