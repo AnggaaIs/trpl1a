@@ -223,7 +223,7 @@
 		color="blue"
 		dismissable={$status.isHoliday}
 		border
-		class="mx-auto mb-5 flex max-w-5xl items-center justify-between"
+		class="mx-auto mt-4 flex max-w-5xl items-center justify-between"
 		transition={fly}
 		params={{ y: -100, duration: 500 }}
 		defaultClass="bg-blue-100 dark:bg-background border-blue-500 text-foreground p-4 gap-3 text-sm"
@@ -235,12 +235,12 @@
 	</Alert>
 {/if}
 
-{#if !allClassesFinished}
+{#if allClassesFinished}
 	<Alert
 		color="red"
 		dismissable
 		border
-		class="mx-auto mb-5 flex max-w-5xl items-center justify-between"
+		class="mx-auto mt-4 flex max-w-5xl items-center justify-between"
 		transition={fly}
 		params={{ y: -100, duration: 500 }}
 		defaultClass="bg-red-100 dark:bg-background border-red-500 text-foreground p-4 gap-3 text-sm"
