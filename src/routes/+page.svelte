@@ -235,7 +235,7 @@
 	</Alert>
 {/if}
 
-{#if allClassesFinished}
+{#if !allClassesFinished}
 	<Alert
 		color="red"
 		dismissable
