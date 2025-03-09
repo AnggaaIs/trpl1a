@@ -169,6 +169,18 @@ export const GET: RequestHandler = async ({ url: OriginURL }) => {
 	const schedule: Record<string, ScheduleEntry[]> = {};
 	const days = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 
+	const today = new Date();
+	const day = today.getDate();
+	const month = today.getMonth() + 1;
+	const year = today.getFullYear();
+	let isRamadhan = false;
+
+	const response = await fetch(`https://api.aladhan.com/v1/gToH?date=${day}-${month}-${year}`);
+	const data = await response.json();
+	const hijri = data.data.hijri;
+
+	if (hijri.month.number === 9) isRamadhan = true;
+
 	for (const day of days) {
 		schedule[day] = [
 			{
@@ -206,18 +218,21 @@ export const GET: RequestHandler = async ({ url: OriginURL }) => {
 				date.setMinutes(minutes);
 
 				for (let i = 0; i < Number(rawSpan); i++) {
-					date.setMinutes(date.getMinutes() + 50);
+					date.setMinutes(date.getMinutes() + (isRamadhan ? 40 : 50));
 
 					const currentHour = date.getHours();
 					const currentMinute = date.getMinutes();
 
-					if (currentHour === 11 && currentMinute >= 55) {
+					if (currentHour === (isRamadhan ? 10 : 11) && currentMinute >= (isRamadhan ? 0 : 55)) {
 						if (i + 1 === Number(rawSpan)) break;
-						date.setHours(13);
-						date.setMinutes(0);
-					} else if (currentHour === 15 && currentMinute >= 30) {
+						date.setHours(isRamadhan ? 10 : 13);
+						date.setMinutes(isRamadhan ? 15 : 0);
+					} else if (
+						currentHour === (isRamadhan ? 12 : 15) &&
+						currentMinute >= (isRamadhan ? 15 : 30)
+					) {
 						if (i + 1 === Number(rawSpan)) break;
-						date.setHours(15);
+						date.setHours(isRamadhan ? 12 : 15);
 						date.setMinutes(45);
 					}
 				}
